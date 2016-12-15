@@ -4,10 +4,6 @@ from gensim.models import Word2Vec
 
 MAX_LEN = 79
 WORD_DIM = 50
-sentences_train_X = []
-sentences_test_X = []
-sentences_train_Y = []
-sentences_test_Y = []
 w2cmodel = Word2Vec.load("./model/50features_1minwords_10context")
 POS_DIC = {"X":0,"O":1,"B":2,"I":3}
 DIC_LEN = len(POS_DIC)
@@ -32,6 +28,10 @@ def get_basic_data(sentences_X,sentences_Y,filepath):
 
 
 def return_eoa_data():
+    sentences_train_X = []
+    sentences_test_X = []
+    sentences_train_Y = []
+    sentences_test_Y = []
     get_basic_data(sentences_test_X,sentences_test_Y,'./data/test')
     get_basic_data(sentences_train_X,sentences_train_Y,'./data/train')
 
@@ -87,8 +87,12 @@ def return_max_sc(test_Y,train_Y):
     return max_sc
 
 
-def get_esc_data(): # evaluation sentiment classification
+def get_eosc_data(): # evaluation sentiment classification
     SC = 4 #0,1,2,3
+    sentences_train_X = []
+    sentences_test_X = []
+    sentences_train_Y = []
+    sentences_test_Y = []
     list_test = get_basic_data(sentences_test_X,sentences_test_Y,'./data/test')
     list_train = get_basic_data(sentences_train_X,sentences_train_Y,'./data/train')
     B_SIZE_TRAIN = return_b_size(sentences_train_Y) #3329
@@ -176,4 +180,4 @@ def get_esc_data(): # evaluation sentiment classification
     return train_X_F,train_X_B,train_Y,test_X_F,test_X_B,test_Y
 
 if __name__ == "__main__":
-    get_esc_data()
+    train_X_F, train_X_B, train_Y, test_X_F, test_X_B, test_Y = get_eosc_data()

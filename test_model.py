@@ -1,5 +1,6 @@
 from keras.models import load_model
 import numpy as np
+import sys
 import get_data
 MAX_LEN = 79
 
@@ -63,22 +64,36 @@ def eoa_eva1(test_Y,predict_test_Y): #(304,79,4),(304,79) {"X":0,"O":1,"B":2,"I"
                     if(flag == 1):
                         right+=1
 
-    print "eva1 is %f" % (right*1.0/total)
+    return right*1.0/total
 
 
-def test_eoa():
+def test_eoa(modelpath):
     train_X,train_Y,test_X,test_Y = get_data.return_eoa_data()
-    lstmmodel = load_model("./model/lstm_model")
-    #print lstmmodel.metrics_names
-    #print lstmmodel.evaluate(test_X,test_Y)
+    lstmmodel = load_model(modelpath)
     predict_test_Y = lstmmodel.predict_classes(test_X)
-    eoa_eva(test_Y, predict_test_Y)
-    eoa_eva1(test_Y, predict_test_Y)
+    #eoa_eva(test_Y, predict_test_Y)
+    return eoa_eva1(test_Y, predict_test_Y)
+
+
+def test_eosc(modelpath):
+    train_X_F, train_X_B, train_Y, test_X_F, test_X_B, test_Y = get_data.get_eosc_data()
+    model = load_model(modelpath)
+    predict_test_Y = model.predict_classes([test_X_F,test_X_B])
+    ans = 0
+    for i,n in enumerate(predict_test_Y):
+        if test_Y[i][n] == 1:
+            ans += 1
+    return ans*1.0/len(predict_test_Y)
+
 
 
 if __name__ == "__main__":
-    test_eoa()
-
+    #print "eoa_lstm_model accuracy is %f" % test_eoa("./model/eoa_lstm_model")
+    #print "eoa_GRU_model accuracy is %f" % test_eoa("./model/eoa_GRU_model")
+    #print "eoa_Blstm_model accuracy is %f" % test_eoa("./model/eoa_Blstm_model")
+    print sys.path
+    print "eosc_lstm_model accuracy is %f" % test_eosc("./model/eosc_lstm_model")
+    print "eosc_Blstm_model accuracy is %f" % test_eosc("./model/eosc_Blstm_model")
 
 
 
