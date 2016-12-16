@@ -94,7 +94,7 @@ def train_eosc_model_of_lstm():
                     metrics=['accuracy'])
     early_stopping = EarlyStopping(monitor='val_loss', patience=2)
     decoder.fit([train_X_F,train_X_B], train_Y, batch_size=40, validation_split=0.1, callbacks=[early_stopping])
-    decoder.save("./model/eosc_lstm_model")
+    decoder.save("./model/eosc_lstm_model_2")
 
 
 def train_eosc_model_of_Blstm():
@@ -130,4 +130,4 @@ if __name__ == "__main__":
     #train_eoa_model_of_GRU()
     #train_eoa_model_of_Blstm()
     #train_eosc_model_of_lstm()
-    train_eosc_model_of_Blstm()
+    #train_eosc_model_of_Blstm()

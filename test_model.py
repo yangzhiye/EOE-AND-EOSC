@@ -88,11 +88,11 @@ def test_eosc(modelpath):
 
 
 if __name__ == "__main__":
-    #print "eoa_lstm_model accuracy is %f" % test_eoa("./model/eoa_lstm_model")
-    #print "eoa_GRU_model accuracy is %f" % test_eoa("./model/eoa_GRU_model")
-    #print "eoa_Blstm_model accuracy is %f" % test_eoa("./model/eoa_Blstm_model")
-    #print "eosc_lstm_model accuracy is %f" % test_eosc("./model/eosc_lstm_model")
-    #print "eosc_Blstm_model accuracy is %f" % test_eosc("./model/eosc_Blstm_model")
+    print "eoa_lstm_model accuracy is %f" % test_eoa("./model/eoa_lstm_model")
+    print "eoa_GRU_model accuracy is %f" % test_eoa("./model/eoa_GRU_model")
+    print "eoa_Blstm_model accuracy is %f" % test_eoa("./model/eoa_Blstm_model")
+    print "eosc_lstm_model accuracy is %f" % test_eosc("./model/eosc_lstm_model")
+    print "eosc_Blstm_model accuracy is %f" % test_eosc("./model/eosc_Blstm_model")
 
 
 
