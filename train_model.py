@@ -16,7 +16,7 @@ import sys
 MAX_LEN = 79
 WORD_DIM = 50
 
-def train_eoa_model_of_lstm():
+def train_eoe_model_of_lstm():
     train_X,train_Y,test_X,test_Y = get_data.return_eoa_data()
     print train_X.shape,train_Y.shape,test_X.shape,test_Y.shape
     mymodel = Sequential()
@@ -32,10 +32,10 @@ def train_eoa_model_of_lstm():
                metrics=['accuracy'])
     early_stopping = EarlyStopping(monitor='val_loss',patience=2)
     mymodel.fit(train_X,train_Y,batch_size=40,validation_split=0.1,callbacks=[early_stopping])
-    mymodel.save("./model/eoa_lstm_model")
+    mymodel.save("./model/eoe_lstm_model")
 
 
-def train_eoa_model_of_GRU():
+def train_eoe_model_of_GRU():
     train_X, train_Y, test_X, test_Y = get_data.return_eoa_data()
     print train_X.shape, train_Y.shape, test_X.shape, test_Y.shape
     mymodel = Sequential()
@@ -51,10 +51,10 @@ def train_eoa_model_of_GRU():
                     metrics=['accuracy'])
     early_stopping = EarlyStopping(monitor='val_loss', patience=2)
     mymodel.fit(train_X, train_Y, batch_size=40, validation_split=0.1, callbacks=[early_stopping])
-    mymodel.save("./model/eoa_GRU_model")
+    mymodel.save("./model/eoe_GRU_model")
 
 
-def train_eoa_model_of_Blstm():
+def train_eoe_model_of_Blstm():
     train_X, train_Y, test_X, test_Y = get_data.return_eoa_data()
     print train_X.shape, train_Y.shape, test_X.shape, test_Y.shape
     mymodel = Sequential()
@@ -70,7 +70,7 @@ def train_eoa_model_of_Blstm():
                     metrics=['accuracy'])
     early_stopping = EarlyStopping(monitor='val_loss', patience=2)
     mymodel.fit(train_X, train_Y, batch_size=40, validation_split=0.1, callbacks=[early_stopping])
-    mymodel.save("./model/eoa_Blstm_model")
+    mymodel.save("./model/eoe_Blstm_model")
 
 
 def train_eosc_model_of_lstm():
@@ -94,7 +94,7 @@ def train_eosc_model_of_lstm():
                     metrics=['accuracy'])
     early_stopping = EarlyStopping(monitor='val_loss', patience=2)
     decoder.fit([train_X_F,train_X_B], train_Y, batch_size=40, validation_split=0.1, callbacks=[early_stopping])
-    decoder.save("./model/eosc_lstm_model_2")
+    decoder.save("./model/eosc_lstm_model")
 
 
 def train_eosc_model_of_Blstm():
@@ -130,4 +130,4 @@ if __name__ == "__main__":
     #train_eoa_model_of_GRU()
     #train_eoa_model_of_Blstm()
     #train_eosc_model_of_lstm()
-    #train_eosc_model_of_Blstm()
+    train_eosc_model_of_Blstm()

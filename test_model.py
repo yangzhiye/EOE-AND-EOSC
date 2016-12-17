@@ -1,9 +1,9 @@
 from keras.models import load_model
+from gensim.models import Word2Vec
 import numpy as np
-import sys
 import get_data
 MAX_LEN = 79
-
+WORD_DIM = 50
 
 def eoa_eva(test_Y,predict_test_Y):
     total = 0
@@ -79,6 +79,7 @@ def test_eosc(modelpath):
     train_X_F, train_X_B, train_Y, test_X_F, test_X_B, test_Y = get_data.get_eosc_data()
     model = load_model(modelpath)
     predict_test_Y = model.predict_classes([test_X_F,test_X_B])
+    print predict_test_Y
     ans = 0
     for i,n in enumerate(predict_test_Y):
         if test_Y[i][n] == 1:
@@ -86,13 +87,71 @@ def test_eosc(modelpath):
     return ans*1.0/len(predict_test_Y)
 
 
+def test_a_sentence(eoe_model_path,eosc_model_path,w2c_model_path):
+    #content = raw_input("input:")
+    content = "the pizza is not good"
+    content_list = content.split(" ")
+    eoe_model = load_model(eoe_model_path)
+    eosc_model = load_model(eosc_model_path)
+    w2cmodel = Word2Vec.load(w2c_model_path)
+    x = np.zeros((1,MAX_LEN,WORD_DIM))
+    for i,word in enumerate(content_list):
+        word = word.strip().lower()
+        x[0][i] = w2cmodel[word]
+    eoe_y = eoe_model.predict_classes(x)
+    B_list = []
+    dic_B = {}
+    count = 0
+    for i,result in enumerate(eoe_y[0]):
+        if result == 2:
+            temp_list = []
+            temp_list.append(content_list[i])
+            temp_i = i
+            n = 0
+            while temp_i + 1 < len(content_list) and eoe_y[0][temp_i+1] == 3:
+                temp_list.append(content_list[temp_i+1])
+                temp_i += 1
+                n += 1
+            dic_B[count] = [i,n]
+            count += 1
+            B_list.append(temp_list)
+    print B_list
+    x_f = np.zeros((len(B_list),MAX_LEN,2*WORD_DIM))
+    x_b = np.zeros((len(B_list),MAX_LEN,2*WORD_DIM))
+    B_vector = np.zeros((50))
+    for i,line in enumerate(B_list):
+        I_count = dic_B[i][1]
+        pos = dic_B[i][0]
+        for j,word in enumerate(line):
+            word = word.strip().lower()
+            B_vector += w2cmodel[word]
+        B_vector /= len(line)
+        for k, word in enumerate(content_list):
+            word = word.strip().lower()
+            if k < pos:
+                x_f[i][k][:50] = w2cmodel[word]
+                x_f[i][k][50:] = B_vector
+            if k == j or I_count > 0:
+                x_f[i][k][:50] = w2cmodel[word]
+                x_f[i][k][50:] = B_vector
+                x_b[i][k - j][:50] = w2cmodel[word]
+                x_b[i][k - j][50:] = B_vector
+                I_count -= 1
+            if k > j:
+                x_b[i][k - j][:50] = w2cmodel[content_list[k]]
+                x_b[i][k - j][50:] = B_vector
+    eosc_y = eosc_model.predict_classes([x_f, x_b])
+    print eosc_y
+
 
 if __name__ == "__main__":
-    print "eoa_lstm_model accuracy is %f" % test_eoa("./model/eoa_lstm_model")
-    print "eoa_GRU_model accuracy is %f" % test_eoa("./model/eoa_GRU_model")
-    print "eoa_Blstm_model accuracy is %f" % test_eoa("./model/eoa_Blstm_model")
-    print "eosc_lstm_model accuracy is %f" % test_eosc("./model/eosc_lstm_model")
+    #print "eoe_lstm_model accuracy is %f" % test_eoa("./model/eoe_lstm_model")
+    #print "eoe_GRU_model accuracy is %f" % test_eoa("./model/eoe_GRU_model")
+    #print "eoe_Blstm_model accuracy is %f" % test_eoa("./model/eoe_Blstm_model")
+    #print "eosc_lstm_model accuracy is %f" % test_eosc("./model/eosc_lstm_model")
     print "eosc_Blstm_model accuracy is %f" % test_eosc("./model/eosc_Blstm_model")
+    #test_a_sentence("./model/eoe_lstm_model", "./model/eosc_Blstm_model", "./model/50features_1minwords_10context")
+
 
 
 
