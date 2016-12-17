@@ -79,7 +79,7 @@ def test_eosc(modelpath):
     train_X_F, train_X_B, train_Y, test_X_F, test_X_B, test_Y = get_data.get_eosc_data()
     model = load_model(modelpath)
     predict_test_Y = model.predict_classes([test_X_F,test_X_B])
-    print predict_test_Y
+    #print predict_test_Y
     ans = 0
     for i,n in enumerate(predict_test_Y):
         if test_Y[i][n] == 1:
@@ -88,8 +88,8 @@ def test_eosc(modelpath):
 
 
 def test_a_sentence(eoe_model_path,eosc_model_path,w2c_model_path):
-    #content = raw_input("input:")
-    content = "the pizza is not good"
+    content = raw_input("input:")
+    #content = "the pizza is not good"
     content_list = content.split(" ")
     eoe_model = load_model(eoe_model_path)
     eosc_model = load_model(eosc_model_path)
@@ -149,8 +149,8 @@ if __name__ == "__main__":
     #print "eoe_GRU_model accuracy is %f" % test_eoa("./model/eoe_GRU_model")
     #print "eoe_Blstm_model accuracy is %f" % test_eoa("./model/eoe_Blstm_model")
     #print "eosc_lstm_model accuracy is %f" % test_eosc("./model/eosc_lstm_model")
-    print "eosc_Blstm_model accuracy is %f" % test_eosc("./model/eosc_Blstm_model")
-    #test_a_sentence("./model/eoe_lstm_model", "./model/eosc_Blstm_model", "./model/50features_1minwords_10context")
+    #print "eosc_Blstm_model accuracy is %f" % test_eosc("./model/eosc_Blstm_model")
+    test_a_sentence("./model/eoe_lstm_model", "./model/eosc_Blstm_model", "./model/50features_1minwords_10context")
 
 
 
