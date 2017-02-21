@@ -17,7 +17,7 @@
 
 ##模型
 ![](https://github.com/yangzhiye/ImageCache/blob/master/eoe&eosc/eosc.png?raw=true)
-本模型来源于论文 <<Effective LSTMs for Target-Dependent Sentiment Classification>>
+本模型来源于论文 《Effective LSTMs for Target-Dependent Sentiment Classification》
 
 ##结果
 * eosc_lstm_model accuracy is 0.596154
